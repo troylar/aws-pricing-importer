@@ -8,7 +8,7 @@ et-xmlfile==1.0.1
 idna==2.8
 jdcal==1.4
 jmespath==0.9.4
-openpyxl==2.5.14
+openpyxl==2.6.1
 pkg-resources==0.0.0
 python-dateutil==2.8.0
 PyYAML==3.13
