@@ -1,44 +1,41 @@
-Welcome to the AWS CodeStar sample web service
-==============================================
+# AWS Pricing Importer
 
-This sample code helps get you started with a simple Python web service using
-AWS Lambda and Amazon API Gateway.
+## Overview
+The purpose of this project is to import *all* of the pricing data points of AWS into [Amazon Athena](https://aws.amazon.com/athena/) to easily query via [Presto SQL](https://prestodb.github.io/docs/0.172/index.html).
 
-What's Here
------------
-
-This sample includes:
-
-* README.txt - this file
-* buildspec.yml - this file is used by AWS CodeBuild to package your
-  application for deployment to AWS Lambda
-* index.py - this file contains the sample Python code for the web service
-* template.yml - this file contains the Serverless Application Model (SAM) used
-  by AWS Cloudformation to deploy your application to AWS Lambda and Amazon API
-  Gateway.
+When you run the QuickStart, it will import every single pricing file providing by AWS *partitioned by region.*  This should keep most 
 
 
-What Do I Do Next?
-------------------
+## Pricing
+Athena costs $5/TB data scanned. The largest data sets are EC2 for each region--approximately 50GB per file.
 
-If you have checked out a local copy of your AWS CodeCommit repository you can
-start making changes to the sample code.  We suggest making a small change to
-index.py first, so you can see how changes pushed to your project's repository
-in AWS CodeCommit are automatically picked up by your project pipeline and
-deployed to AWS Lambda and Amazon API Gateway.  (You can watch the pipeline
-progress on your AWS CodeStart project dashboard.)  Once you've seen how that
-works, start developing your own code, and have fun!
+1TB = 1,000,000 MB = $5
 
-Learn more about Serverless Application Model (SAM) and how it works here:
-https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md
+1MB = $5 / 1,000,000 = $0.000005
 
-AWS Lambda Developer Guide:
-http://docs.aws.amazon.com/lambda/latest/dg/deploying-lambda-apps.html
+The largest data set will cost $0.000025 per query.
 
-Learn more about AWS CodeStar by reading the user guide, and post questions and
-comments about AWS CodeStar on our forum.
+## Requirements
+* Python 3
 
-AWS CodeStar User Guide:
-http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
 
-AWS CodeStar Forum: https://forums.aws.amazon.com/forum.jspa?forumID=248
+
+## QuickStart
+1. Clone this repo
+2. Install the packages:
+    ````
+    $ . ./venv/bin/activate
+    $ pip install -r ./requirements.txt
+    ````
+
+3. Run the importer:
+    ````
+    $ python ./main.py
+    ````
+
+After the import is complete, you can go to Athena and run queries in each location, for example:
+
+````
+SELECT * FROM "awspricedatabase"."awsconfig" WHERE location = 'US East (N. Virginia)'
+````
+
