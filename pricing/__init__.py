@@ -37,16 +37,17 @@ class PriceManager:
         self.prefix = kwargs.get("Prefix", "https://pricing.us-east-1.amazonaws.com")
         self.price_folder = kwargs.get("PriceFolder", "./price_files")
         self.ddl_folder = kwargs.get("DDLFolder", "./ddl")
-        self.athena_database = kwargs.get("AthenaDatabase", "awspricemagiciandatabase")
+        self.athena_database = kwargs.get("AthenaDatabase", "awspricedatabase")
         self.bucket_name = kwargs.get("BucketName", "aws-price-magician-data")
         self.price_url = kwargs.get('PriceUrl', 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json')
         self.client = boto3.client('athena')
+        self.glue_client = boto3.client('glue')
 
     def load_partitions(self):
         queries = []
         files = os.listdir(self.ddl_folder)
         while len(files) > 0:
-            for ddl_file in files[:5]:
+            for ddl_file in files[:3]:
                 offer = ddl_file.split('_')[3].split('.')[0]
                 r = self.client.start_query_execution(
                     QueryString = 'MSCK REPAIR TABLE {};'.format(offer.lower()),
@@ -74,6 +75,10 @@ class PriceManager:
     def create_tables(self):
         queries = []
         files = []
+        self.glue_client.create_database(
+            DatabaseInput={
+                'Name': self.athena_database
+            })
         for ddl_file in os.listdir(self.ddl_folder):
             files.append(ddl_file)
 
