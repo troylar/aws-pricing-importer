@@ -1,7 +1,7 @@
 # AWS Pricing Importer
 
 ## Overview
-The purpose of this project is to import *all* of the pricing data points of AWS into [Amazon Athena](https://aws.amazon.com/athena/) to easily query via [Presto SQL](https://prestodb.github.io/docs/0.172/index.html).
+The purpose of this project is to import *all* of the pricing data points of AWS into [Amazon Athena](https://aws.amazon.com/athena/) to easily query via [Presto SQL](https://prestodb.github.io/docs/0.172/index.html), or better yet, query pricing data into Excel with the [Athena ODBC Driver](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc.html).
 
 When you run the QuickStart, it will import every single pricing file providing by AWS *partitioned by region.*  This should keep most queries fairly inexpensive.
 
